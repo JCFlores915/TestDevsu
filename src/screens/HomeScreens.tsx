@@ -7,32 +7,34 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import { useProducts } from '../hooks/useProducts'
 import { Products } from '../interfaces/productInterface'
 import Skeleton from '../components/Skeleton'
+import { useNavigation } from '@react-navigation/core'
 
 const { width, height } = Dimensions.get('screen');
 
 const HomeScreens = () => {
   const { isLoading, products } = useProducts();
   const [productList, setProductList] = useState<Products[]>([]);
-
-  const [search, setSearch] = React.useState('');
-
+  const [search, setSearch] = useState('');
+  const navigation = useNavigation();
   const headerHeight = useHeaderHeight();
 
   useEffect(() => {
     setProductList(products);
   }, [products]);
 
-  const Item = ({ item: { name, id }, index }: ListRenderItemInfo<Products>): React.JSX.Element => {
+  const Item = ({ item, index }: ListRenderItemInfo<Products>): React.JSX.Element => {
     return (
       <>
-        <TouchableOpacity style={index === 0 ? styles.firstItem : index === products?.length - 1 ? styles.lastItem : styles.item}>
+        <TouchableOpacity
+          style={index === 0 ? styles.firstItem : index === products?.length - 1 ? styles.lastItem : styles.item}
+          onPress={() => navigation.navigate('DeteailScreens', item)}>
           <View style={styles.item_section}>
             <View>
-              <Text style={styles.title}>{name}</Text>
-              <Text style={styles.text_id}>ID: {id}</Text>
+              <Text style={styles.title}>{item.name}</Text>
+              <Text style={styles.text_id}>ID: {item.id}</Text>
             </View>
             <View>
-              <FontAwesomeIcon icon={faChevronRight} />
+              <FontAwesomeIcon icon={faChevronRight} color='gray' />
             </View>
           </View>
         </TouchableOpacity>
