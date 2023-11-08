@@ -22,7 +22,7 @@ export const Navigation = () => {
                 },
                 headerStyle: styles.headerStyle,
                 headerTitleAlign: 'center',
-                headerTitle: props => <Image source={require('../assets/logo.png')} style={styles.logo} />,
+                headerTitle: props => <Image source={require('../assets/logo.png')} style={styles.logo} resizeMode="contain"/>,
             }}
         >
             <Stack.Screen name="HomeScreens" component={HomeScreens} />
@@ -36,10 +36,10 @@ const styles = StyleSheet.create({
     headerStyle: {
         borderBottomWidth: 0.5,
         borderBottomColor: 'grey',
-        height: 100,
     },
     logo: { 
         width: screenWidth * 0.5, 
-        height: 30 }
+        height: 30 
+    }
 })
 
