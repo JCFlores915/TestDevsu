@@ -16,10 +16,28 @@ git clone https://github.com/JCFlores915/TestDevsu.git
 yarn install
 ```
 
-## Correr el proyecto
+## Correr el proyecto en Android
 
 ```bash
-yarn start
+yarn run android
+```
+
+## Correr el proyecto en IOS
+
+```bash
+cd ios
+```
+
+```bash
+pod install
+```
+
+```bash
+cd ..
+```
+
+```bash
+yarn run ios
 ```
 
 ## Correr los test
