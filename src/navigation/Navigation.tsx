@@ -30,6 +30,7 @@ export const Navigation = () => {
                 headerStyle: styles.headerStyle,
                 headerTitleAlign: 'center',
                 headerTitle: props => <Image source={require('../assets/logo.png')} style={styles.logo} resizeMode="contain"/>,
+                headerBackTitleVisible: false,
             }}>
             <Stack.Screen name="HomeScreens" component={HomeScreens} />
             <Stack.Screen name="FormScreens" component={FormScreens} />

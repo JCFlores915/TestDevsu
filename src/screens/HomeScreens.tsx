@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, StyleSheet, Dimensions, FlatList, TouchableOpacity, TextInput, PixelRatio, ListRenderItemInfo } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, FlatList, TouchableOpacity, TextInput, PixelRatio, ListRenderItemInfo, Platform} from 'react-native'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faChevronRight } from '@fortawesome/free-solid-svg-icons/faChevronRight'
 import normalize from '../utils/normalizeText'
@@ -58,7 +58,7 @@ const HomeScreens = ({ navigation }: Props) => {
   </View>
 
   return (
-    <View style={[styles.container, { paddingTop: headerHeight }]}>
+    <View style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 40 : headerHeight }]}>
       <View style={styles.sectionSearch}>
         <TextInput placeholder="Search..." style={styles.itemInput}
           onChangeText={(text) => {

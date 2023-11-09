@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Modal, TouchableWithoutFeedback } from 'react-native';
+import { View, Text, StyleSheet, Dimensions, Image, TouchableOpacity, Modal, Platform } from 'react-native';
 import { StackScreenProps } from '@react-navigation/stack'
 import { RootStackParams } from '../navigation/Navigation'
 import { useHeaderHeight } from '@react-navigation/elements'
@@ -35,7 +35,7 @@ const DeteailScreens = ({ route, navigation }: Props) => {
     navigation.navigate('HomeScreens');
   }
   return (
-    <View style={[styles.container, { paddingTop: headerHeight }]}>
+    <View style={[styles.container, { paddingTop: Platform.OS === 'ios' ? 40 : headerHeight }]}>
       <View style={styles.sectionTitle}>
         <Text style={styles.textTitle}>ID: {productDetail?.id} </Text>
         <Text style={styles.textSubTitle}>Información extra</Text>

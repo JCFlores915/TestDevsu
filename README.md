@@ -1,6 +1,8 @@
 # TestDevsu
 
-<!-- crear un readme el cual explique la instalacion del proyecto -->
+## Imagen local de la aplicacion
+
+![alt text](https://github.com/JCFlores915/TestDevsu/src/assets/screen.png?raw=true)
 
 ## Clonar el repositorio
 
