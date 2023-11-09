@@ -2,7 +2,7 @@
 
 ## Imagen local de la aplicacion
 
-![alt text](https://github.com/JCFlores915/TestDevsu/src/assets/screen.png?raw=true)
+![alt text](https://github.com/JCFlores915/TestDevsu/blob/main/src/assets/screen.png?raw=true)
 
 ## Clonar el repositorio
 
