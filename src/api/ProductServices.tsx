@@ -77,4 +77,11 @@ const deleteProduct = async (id: string) => {
     return response;
 }
 
-export { getProducts, getProductById, deleteProduct, postProduct, putProduct };
+//  VALIDATE ID PRODUCT
+const validateIdProduct = async (id: string) => {
+    const response = await fetch(`${Url}/bp/products/verification?id=${id}`);
+    const data = await response.json();
+    return data;
+}
+
+export { getProducts, getProductById, deleteProduct, postProduct, putProduct, validateIdProduct };

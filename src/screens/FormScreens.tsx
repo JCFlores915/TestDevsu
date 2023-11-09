@@ -2,16 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { ScrollView, TouchableOpacity, Text, StyleSheet, View } from 'react-native';
 import normalize from '../utils/normalizeText';
 import InputCustom from '../components/InputCustom';
-import { validateInput } from '../utils/inputCustomValidate';
+import { validateInput, validateIdExist } from '../utils/inputCustomValidate';
 import { getDateNow, getDateMoreOneYear } from '../utils/formatDate';
 import { FormFields } from '../interfaces/inputInterface';
-import { postProduct } from '../api/ProductServices';
+import { postProduct, validateIdProduct } from '../api/ProductServices';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParams } from '../navigation/Navigation';
 
 interface Props extends StackScreenProps<RootStackParams, 'HomeScreens'> { }
 
-const FormScreens = ({navigation}:Props) => {
+const FormScreens = ({ navigation }: Props) => {
   const [formFields, setFormFields] = useState<FormFields>({
     id: '',
     name: '',
@@ -54,18 +54,52 @@ const FormScreens = ({navigation}:Props) => {
     });
 
     if (isValidForm) {
-      const { releaseDate, reviewDate, ...rest } = formFields;
-      const data = {
-    
-        date_release: releaseDate,
-        date_revision: reviewDate,
-        ...rest,
-      };
 
-      await postProduct(data).finally(() => {
-        navigation.navigate('HomeScreens');
-      });
+      const { id } = formFields;
+      const respValId = await validateIdProduct(id);
+
+      if (respValId) {
+        const { messageError, isValid } = validateIdExist(id);
+        setInputErrors((prevErrors) => ({ ...prevErrors, id: messageError }));
+        isValidForm = isValid;
+      }
+
+      if (isValidForm) {
+        const { releaseDate, reviewDate, ...rest } = formFields;
+        const data = {
+
+          date_release: releaseDate,
+          date_revision: reviewDate,
+          ...rest,
+        };
+
+        await postProduct(data).finally(() => {
+          navigation.navigate('HomeScreens');
+        });
+      }
     }
+  };
+
+  const handleRestart = () => {
+    setFormFields({
+      id: '',
+      name: '',
+      description: '',
+      logo: '',
+      releaseDate: new Date().toISOString(),
+      reviewDate: '',
+    });
+
+    setInputErrors({
+      id: '',
+      name: '',
+      description: '',
+      logo: '',
+      releaseDate: '',
+      reviewDate: '',
+    });
+
+  
   };
 
   useEffect(() => {
@@ -103,7 +137,7 @@ const FormScreens = ({navigation}:Props) => {
           <Text style={styles.textButtonSend}>Enviar</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.buttonRestart} onPress={handleSubmit}>
+        <TouchableOpacity style={styles.buttonRestart} onPress={handleRestart}>
           <Text style={styles.textButtonRestart}>Reinicar</Text>
         </TouchableOpacity>
       </View>

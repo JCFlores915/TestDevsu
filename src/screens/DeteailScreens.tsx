@@ -21,7 +21,7 @@ const DeteailScreens = ({ route, navigation }: Props) => {
   const headerHeight = useHeaderHeight();
 
   const handleDelete = () => {
-    // Logic for deletion
+
     setShowModal(true);
   };
 

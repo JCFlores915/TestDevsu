@@ -17,6 +17,9 @@ export const validateInput = (value: string, inputName: string) => {
 
         case 'reviewDate':
             return validateNonEmptyField(value, 'Fecha de revisión');
+
+        case 'idExist':
+            return validateIdExist(value);
     }
 };
 
@@ -72,3 +75,10 @@ const validateReleaseDate = (value: string) => {
 
     return { messageError, isValid };
 };
+
+export const validateIdExist = (value: string) => {
+    let messageError = `El ID: ${value} ya existe, ingrese otro ID`;
+    let isValid = false;
+
+    return { messageError, isValid };
+ };
