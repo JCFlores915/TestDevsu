@@ -11,7 +11,7 @@ import { Products } from '../interfaces/productInterface';
 export type RootStackParams = {
     HomeScreens: undefined;
     DeteailScreens: Products;
-    FormScreens: { id: string, name: string };
+    FormScreens?: Products;
 };
 
 const Stack = createStackNavigator<RootStackParams>();

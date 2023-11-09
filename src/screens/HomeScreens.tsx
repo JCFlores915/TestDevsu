@@ -7,20 +7,31 @@ import { useHeaderHeight } from '@react-navigation/elements'
 import { useProducts } from '../hooks/useProducts'
 import { Products } from '../interfaces/productInterface'
 import Skeleton from '../components/Skeleton'
-import { useNavigation } from '@react-navigation/core'
+import { StackScreenProps } from '@react-navigation/stack'
+import { RootStackParams } from '../navigation/Navigation'
+import { useIsFocused } from '@react-navigation/native'
 
 const { width, height } = Dimensions.get('screen');
 
-const HomeScreens = () => {
-  const { isLoading, products } = useProducts();
+interface Props extends StackScreenProps<RootStackParams, 'HomeScreens'> { }
+
+const HomeScreens = ({ navigation }: Props) => {
+  const { isLoading, products, refreshProducts } = useProducts();
   const [productList, setProductList] = useState<Products[]>([]);
   const [search, setSearch] = useState('');
-  const navigation = useNavigation();
   const headerHeight = useHeaderHeight();
+  const isFocused = useIsFocused();
 
   useEffect(() => {
     setProductList(products);
+    setSearch('');
   }, [products]);
+
+  useEffect(() => {
+    if (isFocused) {
+      refreshProducts();
+    }
+  }, [isFocused]);
 
   const Item = ({ item, index }: ListRenderItemInfo<Products>): React.JSX.Element => {
     return (
@@ -28,10 +39,10 @@ const HomeScreens = () => {
         <TouchableOpacity
           style={index === 0 ? styles.firstItem : index === products?.length - 1 ? styles.lastItem : styles.item}
           onPress={() => navigation.navigate('DeteailScreens', item)}>
-          <View style={styles.item_section}>
+          <View style={styles.itemSection}>
             <View>
               <Text style={styles.title}>{item.name}</Text>
-              <Text style={styles.text_id}>ID: {item.id}</Text>
+              <Text style={styles.textId}>ID: {item.id}</Text>
             </View>
             <View>
               <FontAwesomeIcon icon={faChevronRight} color='gray' />
@@ -48,8 +59,8 @@ const HomeScreens = () => {
 
   return (
     <View style={[styles.container, { paddingTop: headerHeight }]}>
-      <View style={styles.section_search}>
-        <TextInput placeholder="Search..." style={styles.item_input}
+      <View style={styles.sectionSearch}>
+        <TextInput placeholder="Search..." style={styles.itemInput}
           onChangeText={(text) => {
             setSearch(text);
             const filteredProducts = products.filter((product) => {
@@ -60,12 +71,17 @@ const HomeScreens = () => {
           value={search}
         />
       </View>
-      <View style={styles.section_list}>
+      <View style={styles.sectionList}>
         <FlatList
           data={productList ?? []}
           renderItem={Item}
           keyExtractor={item => item.id}
         />
+      </View>
+      <View style={styles.sectionButton}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('FormScreens')}>
+          <Text style={styles.textButton}>Add Product</Text>
+        </TouchableOpacity>
       </View>
     </View>
   )
@@ -75,10 +91,11 @@ const HomeScreens = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center'
+    alignItems: 'center',
+    marginHorizontal: 20
   },
-  section_search: {
-    width: width * 0.9,
+  sectionSearch: {
+    width: '100%',
     height: height * 0.07,
     borderWidth: 0.5,
     borderColor: 'grey',
@@ -87,40 +104,39 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     paddingHorizontal: 20
   },
-  item_input: {
+  itemInput: {
     fontSize: 22,
   },
-  section_list: {
+  sectionList: {
     marginTop: height * 0.04,
   },
-  item_section: {
+  itemSection: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    width: '100%',
   },
   item: {
     justifyContent: 'center',
     backgroundColor: 'white',
-    marginHorizontal: 16,
     borderTopWidth: 0.5,
     borderBottomWidth: 0.5,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: 'grey',
     height: height * 0.07,
-    width: width * 0.9,
+    width: '100%',
     padding: 20,
   },
   firstItem: {
     justifyContent: 'center',
     backgroundColor: 'white',
-    marginHorizontal: 16,
     borderTopWidth: 0.5,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: 'grey',
     height: height * 0.07,
-    width: width * 0.9,
+    width: '100%',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     padding: 20,
@@ -128,14 +144,13 @@ const styles = StyleSheet.create({
   lastItem: {
     justifyContent: 'center',
     backgroundColor: 'white',
-    marginHorizontal: 16,
     borderBottomWidth: 0.5,
     borderTopWidth: 0.5,
     borderLeftWidth: 0.5,
     borderRightWidth: 0.5,
     borderColor: 'grey',
     height: height * 0.07,
-    width: width * 0.9,
+    width: '100%',
     borderBottomLeftRadius: 10,
     borderBottomRightRadius: 10,
     padding: 20,
@@ -144,12 +159,38 @@ const styles = StyleSheet.create({
     fontSize: normalize(12),
     color: 'black',
   },
-  text_id: {
+  textId: {
     fontSize: normalize(10),
     marginTop: 3
   },
-  skeletonSearch: { width: width * 0.9, height: height * 0.07, marginTop: height * 0.04 },
-  skeletonList: { width: width * 0.9, height: height * 0.6, marginTop: height * 0.04 }
+  skeletonSearch: {
+    width: width * 0.9,
+    height: height * 0.07,
+    marginTop: height * 0.04
+  },
+  skeletonList: {
+    width: width * 0.9,
+    height: height * 0.6,
+    marginTop: height * 0.04
+  },
+  sectionButton: {
+    flexDirection: 'column',
+    width: '100%',
+    position: 'absolute',
+    bottom: 35,
+  },
+  button: {
+    width: '100%',
+    height: height * 0.05,
+    backgroundColor: '#FFDD02',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 5
+  },
+  textButton: {
+    color: 'black',
+    fontWeight: 'bold'
+  },
 })
 
 

@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { RootStackParams } from '../navigation/Navigation'
 import { useHeaderHeight } from '@react-navigation/elements'
 import normalize from '../utils/normalizeText'
-import formatDate from '../utils/formatDate'
+import {formatDate} from '../utils/formatDate'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { deleteProduct } from '../api/ProductServices'
@@ -30,7 +30,7 @@ const DeteailScreens = ({ route, navigation }: Props) => {
   };
 
   const confirmDelete = async (id: string) => { 
-    const rps = await deleteProduct(id);
+    await deleteProduct(id);
     closeModal();
     navigation.navigate('HomeScreens');
   }
@@ -76,7 +76,7 @@ const DeteailScreens = ({ route, navigation }: Props) => {
       <View style={styles.sectonBottomButton}>
         <TouchableOpacity
           style={styles.buttonEdit}
-          onPress={() => navigation.navigate('FormScreens', { id: productDetail?.id, name: productDetail?.name })}
+          onPress={() => navigation.navigate('FormScreens', productDetail)}
         >
           <Text style={styles.buttonEditText}>Editar</Text>
         </TouchableOpacity>
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
   modalFooterBottomConfirm: {
     width: '100%',
     height: height * 0.05,
-    backgroundColor: 'yellow',
+    backgroundColor: '#FFDD02',
     justifyContent: 'center',
     alignItems: 'center',
     borderRadius: 5,

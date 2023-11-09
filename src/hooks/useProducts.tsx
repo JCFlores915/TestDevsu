@@ -17,6 +17,18 @@ export const useProducts = () => {
         }
     };
 
+    const refreshProducts = async () => {
+        setIsLoading(true);
+        try {
+            const data = await getProducts();
+            setProducts(data);
+            setIsLoading(false);
+        } catch (error) {
+            setProducts([]);
+            setIsLoading(false);
+        }
+    };
+
     useEffect(() => {
         getProductos();
     }, []);
@@ -24,5 +36,6 @@ export const useProducts = () => {
     return {
         isLoading,
         products,
+        refreshProducts,
     };
 }

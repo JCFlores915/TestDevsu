@@ -1,5 +1,7 @@
  /// hacer un fetch a la api de productos y retornar la lista de productos en un array 
 
+import { Products } from "../interfaces/productInterface";
+
 // URL: https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros
 
 const Url = 'https://tribu-ti-staffing-desarrollo-afangwbmcrhucqfh.z01.azurefd.net/ipf-msa-productosfinancieros';
@@ -33,10 +35,33 @@ const getProductById = async (id: string) => {
 
 
 // POST PRODUCTS
+const postProduct = async (product: Products) => {
 
+    const response = await fetch(`${Url}/bp/products`,{
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'AuthorId': authorId
+        },
+        body: JSON.stringify(product)
+    });
+    
+    return response;
+};
 
 // PUT PRODUCTS
-
+const putProduct = async (product: any) => {
+    const response = await fetch(`${Url}/bp/products`,{
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'AuthorId': authorId
+        },
+        body: JSON.stringify(product)
+    });
+    
+    return response;
+};
 
 // DELETE PRODUCTS
 
@@ -52,4 +77,4 @@ const deleteProduct = async (id: string) => {
     return response;
 }
 
-export { getProducts, getProductById, deleteProduct };
+export { getProducts, getProductById, deleteProduct, postProduct, putProduct };
