@@ -9,7 +9,7 @@ import { postProduct, validateIdProduct } from '../api/ProductServices';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParams } from '../navigation/Navigation';
 
-interface Props extends StackScreenProps<RootStackParams, 'HomeScreens'> { }
+interface Props extends StackScreenProps<RootStackParams, 'FormScreens'> { }
 
 const FormScreens = ({ navigation }: Props) => {
   const [formFields, setFormFields] = useState<FormFields>({

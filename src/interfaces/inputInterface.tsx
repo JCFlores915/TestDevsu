@@ -18,3 +18,13 @@ export interface FormFields {
     releaseDate: string;
     reviewDate: string;
 }
+
+
+export const nameFiled = {
+    id: 'ID',
+    name: 'Nombre',
+    description: 'Descripción',
+    logo: 'Logo',
+    releaseDate: 'Fecha de lanzamiento',
+    reviewDate: 'Fecha de revisión',
+}

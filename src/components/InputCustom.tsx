@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
-import { InputCustomProps } from '../interfaces/inputInterface';
+import { InputCustomProps, nameFiled } from '../interfaces/inputInterface';
 import normalize from '../utils/normalizeText';
 
 const InputCustom = ({ title, value, setValue, messageError = '', isValid = true, editable = true }:InputCustomProps) => {
@@ -10,7 +10,9 @@ const InputCustom = ({ title, value, setValue, messageError = '', isValid = true
 
     return (
         <View style={styles.containerInput}>
-            <Text style={styles.textTitleInput}>{title}</Text>
+            <Text style={styles.textTitleInput}>{
+                nameFiled[title as keyof typeof nameFiled]
+            }</Text>
             <TextInput
                 style={isValid ? styles.textInput : styles.textInputError}
                 value={value}
