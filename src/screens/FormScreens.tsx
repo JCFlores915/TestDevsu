@@ -3,15 +3,18 @@ import { ScrollView, TouchableOpacity, Text, StyleSheet, View } from 'react-nati
 import normalize from '../utils/normalizeText';
 import InputCustom from '../components/InputCustom';
 import { validateInput, validateIdExist } from '../utils/inputCustomValidate';
-import { getDateNow, getDateMoreOneYear } from '../utils/formatDate';
+import { getDateNow, getDateMoreOneYear, formatDateOnly } from '../utils/formatDate';
 import { FormFields } from '../interfaces/inputInterface';
-import { postProduct, validateIdProduct } from '../api/ProductServices';
+import { postProduct, validateIdProduct, putProduct } from '../api/ProductServices';
 import { StackScreenProps } from '@react-navigation/stack';
 import { RootStackParams } from '../navigation/Navigation';
 
 interface Props extends StackScreenProps<RootStackParams, 'FormScreens'> { }
 
-const FormScreens = ({ navigation }: Props) => {
+const FormScreens = ({ route, navigation }: Props) => {
+
+  const [product, setProduct] = useState(route.params);
+
   const [formFields, setFormFields] = useState<FormFields>({
     id: '',
     name: '',
@@ -54,7 +57,6 @@ const FormScreens = ({ navigation }: Props) => {
     });
 
     if (isValidForm) {
-
       const { id } = formFields;
       const respValId = await validateIdProduct(id);
 
@@ -80,6 +82,36 @@ const FormScreens = ({ navigation }: Props) => {
     }
   };
 
+  const handleSubmitEdit = async () => {
+    const fields: Array<keyof FormFields> = Object.keys(formFields) as Array<keyof FormFields>;
+    let isValidForm = true;
+
+    fields.forEach((field) => {
+      if (product && field === 'releaseDate') {
+        isValidForm = true;
+      } else {
+        const isValid = handleFieldValidation(field, formFields[field]);
+        if (!isValid) {
+          isValidForm = false;
+        }
+      }
+    });
+
+    if (isValidForm) {
+      const { releaseDate, reviewDate, ...rest } = formFields;
+      const data = {
+
+        date_release: releaseDate,
+        date_revision: reviewDate,
+        ...rest,
+      };
+
+      await putProduct(data).finally(() => {
+        navigation.navigate('HomeScreens');
+      });
+    }
+  };
+
   const handleRestart = () => {
     setFormFields({
       id: '',
@@ -99,15 +131,27 @@ const FormScreens = ({ navigation }: Props) => {
       reviewDate: '',
     });
 
-  
+    setProduct(undefined);
+
+
   };
 
   useEffect(() => {
-    setFormFields((prevFields) => ({
-      ...prevFields,
-      releaseDate: getDateNow(),
-    }));
-  }, []);
+    if (product) {
+      const { date_release, date_revision, ...rest } = product;
+      setFormFields((prevFields) => ({
+        ...prevFields,
+        ...rest,
+        releaseDate: formatDateOnly(date_release),
+        reviewDate: date_revision,
+      }));
+    } else {
+      setFormFields((prevFields) => ({
+        ...prevFields,
+        releaseDate: getDateNow(),
+      }));
+    }
+  }, [product]);
 
   useEffect(() => {
     setFormFields((prevFields) => ({
@@ -133,7 +177,9 @@ const FormScreens = ({ navigation }: Props) => {
         />
       ))}
       <View>
-        <TouchableOpacity style={styles.buttonSend} onPress={handleSubmit} >
+        <TouchableOpacity style={styles.buttonSend} onPress={() => {
+          product === undefined ? handleSubmit() : handleSubmitEdit()
+        }}>
           <Text style={styles.textButtonSend}>Enviar</Text>
         </TouchableOpacity>
 

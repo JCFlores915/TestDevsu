@@ -1,18 +1,16 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import { View, Text, TextInput, StyleSheet } from 'react-native';
 import { InputCustomProps, nameFiled } from '../interfaces/inputInterface';
 import normalize from '../utils/normalizeText';
 
-const InputCustom = ({ title, value, setValue, messageError = '', isValid = true, editable = true }:InputCustomProps) => {
-    const handleTextChange = (text:string) => {
+const InputCustom = ({ title, value, setValue, messageError = '', isValid = true, editable = true }: InputCustomProps) => {
+    const handleTextChange = (text: string) => {
         setValue(text);
     };
 
     return (
         <View style={styles.containerInput}>
-            <Text style={styles.textTitleInput}>{
-                nameFiled[title as keyof typeof nameFiled]
-            }</Text>
+            <Text style={styles.textTitleInput}>{nameFiled[title as keyof typeof nameFiled]}</Text>
             <TextInput
                 style={isValid ? styles.textInput : styles.textInputError}
                 value={value}
@@ -26,7 +24,7 @@ const InputCustom = ({ title, value, setValue, messageError = '', isValid = true
 
 
 const styles = StyleSheet.create({
-    containerInput: {   
+    containerInput: {
     },
     textTitleInput: {
         fontSize: normalize(12),

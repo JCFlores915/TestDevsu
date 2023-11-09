@@ -4,7 +4,7 @@ import { StackScreenProps } from '@react-navigation/stack'
 import { RootStackParams } from '../navigation/Navigation'
 import { useHeaderHeight } from '@react-navigation/elements'
 import normalize from '../utils/normalizeText'
-import {formatDate} from '../utils/formatDate'
+import { formatDate } from '../utils/formatDate'
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
 import { faXmark } from '@fortawesome/free-solid-svg-icons'
 import { deleteProduct } from '../api/ProductServices'
@@ -29,7 +29,7 @@ const DeteailScreens = ({ route, navigation }: Props) => {
     setShowModal(false);
   };
 
-  const confirmDelete = async (id: string) => { 
+  const confirmDelete = async (id: string) => {
     await deleteProduct(id);
     closeModal();
     navigation.navigate('HomeScreens');
@@ -54,7 +54,6 @@ const DeteailScreens = ({ route, navigation }: Props) => {
 
         <View style={styles.sectionDetailsRow}>
           <Text style={styles.textRowLeft}>Logo </Text>
-          {/* <Text style={styles.textRowRight}>{productDetail?.logo}</Text> */}
           <Image
             style={{ width: '100%', height: 100 }}
             source={{ uri: productDetail?.logo }}
