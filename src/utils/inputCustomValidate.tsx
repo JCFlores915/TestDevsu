@@ -18,8 +18,6 @@ export const validateInput = (value: string, inputName: string) => {
         case 'reviewDate':
             return validateNonEmptyField(value, 'Fecha de revisión');
 
-        case 'idExist':
-            return validateIdExist(value);
     }
 };
 
